@@ -22,7 +22,7 @@ def process_images(head_image, target_image, use_enhancer):
     subprocess.run(command, shell=True)
 
     # 返回处理后的图像
-    processed_image = np.array(Image.open("output.jpeg"))
+    processed_image = np.array(Image.open(output_fname))
     return processed_image
 
 
@@ -52,7 +52,7 @@ with gr.Blocks() as demo:
         head_image = gr.Image(label="上传 'head.jpeg' 图像", value=default_head).style(height=400)
         target_image = gr.Image(label="上传 'target.jpeg' 图像").style(height=400)
         target_video = gr.Video(label="上传视频").style(height=400)
-    enhancer_checkbox = gr.Checkbox(label="启用 enhancer")
+    enhancer_checkbox = gr.Checkbox(label="启用 enhancer(面部占比大的时候——自拍、怼脸特写，建议启用)")
     with gr.Row():
         btn_image = gr.Button("处理图像")
         btn_video = gr.Button("处理视频")
