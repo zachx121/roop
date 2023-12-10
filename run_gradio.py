@@ -3,6 +3,9 @@ import subprocess
 import os
 import numpy as np
 from PIL import Image
+from datetime import datetime
+
+NUM_THREADS_VIDEO = 24  # 8线程大概7.7G
 
 # 定义处理函数
 def process_images(head_image, target_image, use_enhancer):
@@ -12,7 +15,10 @@ def process_images(head_image, target_image, use_enhancer):
 
     # 执行图像处理命令
     processor = "face_swapper face_enhancer" if use_enhancer else "face_swapper"
-    command = "python run.py -s head.jpeg -t target.jpeg -o output.jpeg --frame-processor %s" % processor
+    output_fname = "output_%s.jpeg" % datetime.now().strftime("%Y%m%d%H%M%S")
+    command = "python run.py --execution-provider cuda " \
+              f"-s head.jpeg -t target.jpeg -o {output_fname} " \
+              "--frame-processor %s" % processor
     subprocess.run(command, shell=True)
 
     # 返回处理后的图像
@@ -23,13 +29,18 @@ def process_images(head_image, target_image, use_enhancer):
 def process_videos(head_image, target_video_fp, use_enhancer):
     Image.fromarray(head_image).save("head.jpeg")
     print("target_video_fp is %s" % target_video_fp)
-    # 执行图像处理命令
     processor = "face_swapper face_enhancer" if use_enhancer else "face_swapper"
-    command = "python run.py -s head.jpeg -t %s -o output.mp4 --frame-processor %s" % (target_video_fp, processor)
+    output_fname = "output_%s.mp4" % datetime.now().strftime("%Y%m%d%H%M%S")
+    command = "python run.py --execution-provider cuda " \
+              "-s head.jpeg " \
+              f"-t {target_video_fp} " \
+              f"-o {output_fname} " \
+              f"--frame-processor {processor} " \
+              f"--execution-threads {NUM_THREADS_VIDEO}"
     subprocess.run(command, shell=True)
 
     # 返回处理后的图像
-    return "output.mp4"
+    return output_fname
 
 
 # 创建Gradio界面
