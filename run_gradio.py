@@ -48,9 +48,10 @@ def process_videos(head_image, target_video_fp, use_enhancer):
 with gr.Blocks() as demo:
     gr.Markdown("图像处理界面")
     with gr.Row():
-        head_image = gr.Image(label="上传 'head.jpeg' 图像").style(height=400)
+        default_head = np.array(Image.open("head.jpeg")) if os.path.exists("head.jpeg") else None
+        head_image = gr.Image(label="上传 'head.jpeg' 图像", value=default_head).style(height=400)
         target_image = gr.Image(label="上传 'target.jpeg' 图像").style(height=400)
-        target_video = gr.Video(label="上传视频", type="file").style(height=400)
+        target_video = gr.Video(label="上传视频").style(height=400)
     enhancer_checkbox = gr.Checkbox(label="启用 enhancer")
     with gr.Row():
         btn_image = gr.Button("处理图像")
