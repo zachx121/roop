@@ -5,19 +5,20 @@ import numpy as np
 from PIL import Image
 from datetime import datetime
 
-NUM_THREADS_VIDEO = 24  # 8线程大概7.7G
+NUM_THREADS_VIDEO = 20  # 8线程大概7.7G
 
 # 定义处理函数
-def process_images(head_image, target_image, use_enhancer):
+def process_images(head_image, target_image_fp, use_enhancer):
     # 保存上传的图片
     Image.fromarray(head_image).save("head.jpeg")
-    Image.fromarray(target_image).save("target.jpeg")
+    # Image.fromarray(target_image).save("target.jpeg")
+    output_fname = ".".join(os.path.basename(target_image_fp).split(".")[:-1]) + "_swap.jpeg"
 
     # 执行图像处理命令
     processor = "face_swapper face_enhancer" if use_enhancer else "face_swapper"
     output_fname = "output_%s.jpeg" % datetime.now().strftime("%Y%m%d%H%M%S")
     command = "python run.py --execution-provider cuda " \
-              f"-s head.jpeg -t target.jpeg -o {output_fname} " \
+              f"-s head.jpeg -t {target_image_fp} -o {output_fname} " \
               "--frame-processor %s" % processor
     subprocess.run(command, shell=True)
 
@@ -25,12 +26,13 @@ def process_images(head_image, target_image, use_enhancer):
     processed_image = np.array(Image.open(output_fname))
     return processed_image
 
-
+# python run.py --execution-provider cuda -s head.jpeg -t target.mp4 -o output.mp4 --frame-processor face_swapper --execution-threads 20
 def process_videos(head_image, target_video_fp, use_enhancer):
     Image.fromarray(head_image).save("head.jpeg")
     print("target_video_fp is %s" % target_video_fp)
     processor = "face_swapper face_enhancer" if use_enhancer else "face_swapper"
-    output_fname = "output_%s.mp4" % datetime.now().strftime("%Y%m%d%H%M%S")
+    # output_fname = "output_%s.mp4" % datetime.now().strftime("%Y%m%d%H%M%S")
+    output_fname = ".".join(os.path.basename(target_video_fp).split(".")[:-1]) + "_swap.mp4"
     command = "python run.py --execution-provider cuda " \
               "-s head.jpeg " \
               f"-t {target_video_fp} " \
@@ -50,7 +52,7 @@ with gr.Blocks() as demo:
     with gr.Row():
         default_head = np.array(Image.open("head.jpeg")) if os.path.exists("head.jpeg") else None
         head_image = gr.Image(label="上传 'head.jpeg' 图像", value=default_head).style(height=400)
-        target_image = gr.Image(label="上传 'target.jpeg' 图像").style(height=400)
+        target_image_fp = gr.Image(label="上传 'target.jpeg' 图像", type="filepath").style(height=400)
         target_video = gr.Video(label="上传视频").style(height=400)
     enhancer_checkbox = gr.Checkbox(label="启用 enhancer(面部占比大的时候——自拍、怼脸特写，建议启用)")
     with gr.Row():
@@ -61,7 +63,7 @@ with gr.Blocks() as demo:
         output_video = gr.Video(label="处理后的视频").style(height=400)
 
     btn_image.click(process_images,
-                    inputs=[head_image, target_image, enhancer_checkbox],
+                    inputs=[head_image, target_image_fp, enhancer_checkbox],
                     outputs=output_image)
 
     btn_video.click(process_videos,
@@ -70,3 +72,4 @@ with gr.Blocks() as demo:
 
 # 启动Gradio界面
 demo.launch(server_port=6006)
+# python run.py --execution-provider cuda -s head.jpeg -t target.mp4 -o output.mp4 --frame-processor face_swapper --execution-threads 20
