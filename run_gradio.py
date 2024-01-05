@@ -17,9 +17,9 @@ def process_images(head_image_fp, target_image_fp, use_enhancer):
     prefix = os.path.basename(head_image_fp).split(".")[0]
     output_fname = f"{prefix}_" + ".".join(os.path.basename(target_image_fp).split(".")[:-1]) + "_swap.jpeg"
     command = "python run.py --execution-provider cuda " \
-              f"-s {head_image_fp} " \
-              f"-t {target_image_fp} " \
-              f"-o {output_fname} " \
+              f"-s '{head_image_fp}' " \
+              f"-t '{target_image_fp}' " \
+              f"-o '{output_fname}' " \
               "--frame-processor %s" % processor
     subprocess.run(command, shell=True)
 
@@ -35,9 +35,9 @@ def process_videos(head_image_fp, target_video_fp, use_enhancer):
     prefix = os.path.basename(head_image_fp).split(".")[0]
     output_fname = f"{prefix}_" + ".".join(os.path.basename(target_video_fp).split(".")[:-1]) + "_swap.mp4"
     command = "python run.py --execution-provider cuda " \
-              f"-s {head_image_fp} " \
-              f"-t {target_video_fp} " \
-              f"-o {output_fname} " \
+              f"-s '{head_image_fp}' " \
+              f"-t '{target_video_fp}' " \
+              f"-o '{output_fname}' " \
               f"--frame-processor {processor} " \
               f"--execution-threads {NUM_THREADS_VIDEO}"
     subprocess.run(command, shell=True)
