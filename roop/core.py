@@ -17,7 +17,7 @@ import onnxruntime
 import tensorflow
 import roop.globals
 import roop.metadata
-import roop.ui as ui
+# import roop.ui as ui
 from roop.predictor import predict_image, predict_video
 from roop.processors.frame.core import get_frame_processors_modules
 from roop.utilities import has_image_extension, is_image, is_video, detect_fps, create_video, extract_frames, get_temp_frame_paths, restore_audio, create_temp, move_temp, clean_temp, normalize_output_path
@@ -124,8 +124,8 @@ def pre_check() -> bool:
 
 def update_status(message: str, scope: str = 'ROOP.CORE') -> None:
     print(f'[{scope}] {message}')
-    if not roop.globals.headless:
-        ui.update_status(message)
+    # if not roop.globals.headless:
+    #     ui.update_status(message)
 
 
 def start() -> None:
@@ -218,5 +218,6 @@ def run() -> None:
     if roop.globals.headless:
         start()
     else:
-        window = ui.init(start, destroy)
-        window.mainloop()
+        pass
+        # window = ui.init(start, destroy)
+        # window.mainloop()
