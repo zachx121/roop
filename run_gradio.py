@@ -6,7 +6,7 @@ from PIL import Image
 from datetime import datetime
 
 NUM_THREADS_VIDEO = 20  # 8线程大概7.7G
-FACE_SIM_DIST = 0.5  # default 0.85
+FACE_SIM_DIST = 0.95  # default 0.85, 单人视频时可以把值调大让替换更稳定，避免某些帧没替换到
 os.system("mkdir -p heads")
 os.system("mkdir -p outputs")
 
