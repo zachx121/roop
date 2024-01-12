@@ -96,5 +96,3 @@ with gr.Blocks() as demo:
 
 # 启动Gradio界面
 demo.launch(server_port=6006)
-# python run.py --execution-provider cuda -s head.jpeg -t target.mp4 -o output.mp4 --frame-processor face_swapper --execution-threads 20
-# python run.py --execution-provider cuda -s heads/YXQ.png -t target.jpeg -o output.jpeg --frame-processor face_swapper face_enhancer --execution-threads 20
