@@ -1,9 +1,10 @@
 #!/bin/bash
 set -e
+TDIR=$1
 NAME=$2
 S_IMG="heads/${NAME}.png"
 # 遍历当前目录下的所有文件
-for file in "$1"/*; do
+for file in "$TDIR"/*; do
     # 检查是否为文件
     if [ -f "$file" ]; then
         # 获取文件名（不带扩展名）
