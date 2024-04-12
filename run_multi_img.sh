@@ -19,4 +19,3 @@ for file in "$TDIR"/*; do
         python run.py --execution-provider cuda -s "$S_IMG" -t "${file}" -o "${output}" --frame-processor face_swapper --execution-threads 15
     fi
 done
-
