@@ -33,7 +33,6 @@ def process_images(head_image_fp, target_image_fp, use_enhancer, face_sim_dist):
 def process_videos(head_image_fp, target_video_fp, use_enhancer, skip_nonswap_frame, face_sim_dist):
     print("head_image_fp is %s" % head_image_fp)
     print("target_video_fp is %s" % target_video_fp)
-    print("roop.globals.skip_nonswap_frame is %s" % roop.globals.skip_nonswap_frame)
     print("skip_nonswap_frame is %s" % skip_nonswap_frame)
     processor = "face_swapper face_enhancer" if use_enhancer else "face_swapper"
     prefix = os.path.basename(head_image_fp).split(".")[0]
