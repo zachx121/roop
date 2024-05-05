@@ -42,9 +42,10 @@ def process_videos(head_image_fp, target_video_fp, use_enhancer, skip_nonswap_fr
               f"-t '{target_video_fp}' " \
               f"-o '{output_fname}' " \
               f"--similar-face-distance {face_sim_dist} " \
-              f"--skip_nonswap_frame {skip_nonswap_frame} " \
               f"--frame-processor {processor} " \
               f"--execution-threads {NUM_THREADS_VIDEO}"
+    if skip_nonswap_frame:
+        command += "--skip_nonswap_frame"
     subprocess.run(command, shell=True)
 
     # 返回处理后的图像

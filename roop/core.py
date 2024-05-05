@@ -64,7 +64,7 @@ def parse_args() -> None:
     roop.globals.reference_face_position = args.reference_face_position
     roop.globals.reference_frame_number = args.reference_frame_number
     roop.globals.similar_face_distance = args.similar_face_distance
-    roop.globals.skip_nonswap_frame = args.skip_nonswap_frame
+    roop.globals.skip_nonswap_frame =
     roop.globals.temp_frame_format = args.temp_frame_format
     roop.globals.temp_frame_quality = args.temp_frame_quality
     roop.globals.output_video_encoder = args.output_video_encoder
@@ -73,6 +73,8 @@ def parse_args() -> None:
     roop.globals.execution_providers = decode_execution_providers(args.execution_provider)
     roop.globals.execution_threads = args.execution_threads
 
+    print("args.skip_nonswap_frame is %s" % args.skip_nonswap_frame)
+    print("roop.globals.skip_nonswap_frame is %s" % roop.globals.skip_nonswap_frame)
 
 def encode_execution_providers(execution_providers: List[str]) -> List[str]:
     return [execution_provider.replace('ExecutionProvider', '').lower() for execution_provider in execution_providers]
