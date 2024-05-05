@@ -95,7 +95,8 @@ def process_frames(source_path: str, temp_frame_paths: List[str], update: Callab
     # 未实现替换的帧剔除掉
     if roop.globals.skip_nonswap_frame:
         print(f">>> 未实现替换的帧剔除掉 (e.g. {nonswap_frame_paths[0]})")
-        _ = [temp_frame_paths.remove(p) for p in nonswap_frame_paths]
+        for p in nonswap_frame_paths:
+            os.system(f"rm {p}")
 
 
 def process_image(source_path: str, target_path: str, output_path: str) -> None:
