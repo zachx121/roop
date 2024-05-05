@@ -93,7 +93,7 @@ def process_frames(source_path: str, temp_frame_paths: List[str], update: Callab
             update()
 
     # 未实现替换的帧剔除掉
-    if roop.globals.skip_nonswap_frame:
+    if roop.globals.skip_nonswap_frame and len(nonswap_frame_paths)>0:
         print(f">>> 未实现替换的帧剔除掉 (e.g. {nonswap_frame_paths[0]})")
         for p in nonswap_frame_paths:
             os.system(f"rm {p}")
