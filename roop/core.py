@@ -73,8 +73,8 @@ def parse_args() -> None:
     roop.globals.execution_providers = decode_execution_providers(args.execution_provider)
     roop.globals.execution_threads = args.execution_threads
 
-    print("args.skip_nonswap_frame is %s" % args.skip_nonswap_frame)
-    print("roop.globals.skip_nonswap_frame is %s" % roop.globals.skip_nonswap_frame)
+    # print("args.skip_nonswap_frame is %s" % args.skip_nonswap_frame)
+    # print("roop.globals.skip_nonswap_frame is %s" % roop.globals.skip_nonswap_frame)
 
 def encode_execution_providers(execution_providers: List[str]) -> List[str]:
     return [execution_provider.replace('ExecutionProvider', '').lower() for execution_provider in execution_providers]

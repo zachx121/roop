@@ -78,7 +78,7 @@ def process_frame(source_face: Face, reference_face: Face, temp_frame: Frame) ->
 def process_frames(source_path: str, temp_frame_paths: List[str], update: Callable[[], None]) -> None:
     source_face = get_one_face(cv2.imread(source_path))
     reference_face = None if roop.globals.many_faces else get_face_reference()
-    nonswap_frame_path = []
+    nonswap_frame_paths = []
     for temp_frame_path in temp_frame_paths:
         temp_frame = cv2.imread(temp_frame_path)
         # 每一帧都重新提取reference_face
@@ -87,15 +87,15 @@ def process_frames(source_path: str, temp_frame_paths: List[str], update: Callab
         result = process_frame(source_face, reference_face, temp_frame)
         # 每一帧检查是否实现替换
         if np.array_equal(result, temp_frame):
-            nonswap_frame_path.append(temp_frame_path)
+            nonswap_frame_paths.append(temp_frame_path)
         cv2.imwrite(temp_frame_path, result)
         if update:
             update()
 
     # 未实现替换的帧剔除掉
     if roop.globals.skip_nonswap_frame:
-        print(">>> 未实现替换的帧剔除掉")
-        _ = [temp_frame_paths.remove(p) for p in nonswap_frame_path]
+        print(f">>> 未实现替换的帧剔除掉 (e.g. {nonswap_frame_paths[0]})")
+        _ = [temp_frame_paths.remove(p) for p in nonswap_frame_paths]
 
 
 def process_image(source_path: str, target_path: str, output_path: str) -> None:
