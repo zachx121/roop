@@ -2,7 +2,7 @@ from typing import Any, List, Callable
 import cv2
 import insightface
 import threading
-
+import os
 import numpy as np
 import roop.globals
 import roop.processors.frame.core
