@@ -30,9 +30,11 @@ def process_images(head_image_fp, target_image_fp, use_enhancer, face_sim_dist):
 
 
 # python run.py --execution-provider cuda -s head.jpeg -t target.mp4 -o output.mp4 --frame-processor face_swapper --execution-threads 20
-def process_videos(head_image_fp, target_video_fp, use_enhancer, face_sim_dist):
+def process_videos(head_image_fp, target_video_fp, use_enhancer, skip_nonswap_frame, face_sim_dist):
     print("head_image_fp is %s" % head_image_fp)
     print("target_video_fp is %s" % target_video_fp)
+    print("roop.globals.skip_nonswap_frame is %s" % roop.globals.skip_nonswap_frame)
+    print("skip_nonswap_frame is %s" % skip_nonswap_frame)
     processor = "face_swapper face_enhancer" if use_enhancer else "face_swapper"
     prefix = os.path.basename(head_image_fp).split(".")[0]
     output_fname = f"{prefix}_" + ".".join(os.path.basename(target_video_fp).split(".")[:-1]) + "_swap.mp4"
@@ -41,6 +43,7 @@ def process_videos(head_image_fp, target_video_fp, use_enhancer, face_sim_dist):
               f"-t '{target_video_fp}' " \
               f"-o '{output_fname}' " \
               f"--similar-face-distance {face_sim_dist} " \
+              f"--skip_nonswap_frame {skip_nonswap_frame} " \
               f"--frame-processor {processor} " \
               f"--execution-threads {NUM_THREADS_VIDEO}"
     subprocess.run(command, shell=True)
@@ -75,7 +78,9 @@ with gr.Blocks() as demo:
             with gr.Row():
                 enhancer_checkbox = gr.Checkbox(label="启用 enhancer(面部占比大的时候——自拍、怼脸特写，建议启用)")
             with gr.Row():
-                face_sim_dist = gr.Number(value=FACE_SIM_DIST, label="FACE_SIM_DIST")
+                skip_nonswap_checkbox = gr.Checkbox(label="不保存没有实现替换的帧")
+            with gr.Row():
+                face_sim_dist = gr.Number(value=FACE_SIM_DIST, label="参数 FACE_SIM_DIST(单人视频时可以把值调大让替换更稳定，避免某些帧没替换到)")
     with gr.Row():
         btn_image = gr.Button("处理图像")
         btn_video = gr.Button("处理视频")
@@ -89,7 +94,7 @@ with gr.Blocks() as demo:
                     outputs=output_image)
 
     btn_video.click(process_videos,
-                    inputs=[dropdown, target_video, enhancer_checkbox, face_sim_dist],
+                    inputs=[dropdown, target_video, enhancer_checkbox, skip_nonswap_checkbox, face_sim_dist],
                     outputs=output_video)
 
     dropdown.select(process_dropdown_select, outputs=[dropdown, head_image_fp])

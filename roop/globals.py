@@ -20,3 +20,4 @@ max_memory: Optional[int] = None
 execution_providers: List[str] = []
 execution_threads: Optional[int] = None
 log_level: str = 'error'
+skip_nonswap_frame: Optional[bool] = None  # won't save frame which didn't swap face
