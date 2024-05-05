@@ -64,7 +64,7 @@ def parse_args() -> None:
     roop.globals.reference_face_position = args.reference_face_position
     roop.globals.reference_frame_number = args.reference_frame_number
     roop.globals.similar_face_distance = args.similar_face_distance
-    roop.globals.skip_nonswap_frame =
+    roop.globals.skip_nonswap_frame = args.skip_nonswap_frame
     roop.globals.temp_frame_format = args.temp_frame_format
     roop.globals.temp_frame_quality = args.temp_frame_quality
     roop.globals.output_video_encoder = args.output_video_encoder
