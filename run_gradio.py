@@ -35,8 +35,8 @@ def process_videos(head_image_fp, target_video_fp, use_enhancer, skip_nonswap_fr
     print("head_image_fp is %s" % head_image_fp)
     print("target_video_fp is %s" % target_video_fp)
     print("skip_nonswap_frame is %s" % skip_nonswap_frame)
-    print("temp_output_path is %s" % get_temp_output_path(target_path))
-    print("temp_directory_path is %s" % get_temp_directory_path(target_path))
+    print("temp_output_path is %s" % get_temp_output_path(target_video_fp))
+    print("temp_directory_path is %s" % get_temp_directory_path(target_video_fp))
     processor = "face_swapper face_enhancer" if use_enhancer else "face_swapper"
     prefix = os.path.basename(head_image_fp).split(".")[0]
     output_fname = f"{prefix}_" + ".".join(os.path.basename(target_video_fp).split(".")[:-1]) + "_swap.mp4"
