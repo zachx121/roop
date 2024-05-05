@@ -62,7 +62,8 @@ def swap_face(source_face: Face, target_face: Face, temp_frame: Frame) -> Frame:
     return get_face_swapper().get(temp_frame, target_face, source_face, paste_back=True)
 
 
-def process_frame(source_face: Face, reference_face: Face, temp_frame: Frame) -> Frame:
+def process_frame(source_face: Face, reference_face: Face, temp_frame: Frame) -> (Frame,bool):
+    is_swapped = False
     if roop.globals.many_faces:
         many_faces = get_many_faces(temp_frame)
         if many_faces:
@@ -72,7 +73,8 @@ def process_frame(source_face: Face, reference_face: Face, temp_frame: Frame) ->
         target_face = find_similar_face(temp_frame, reference_face)
         if target_face:
             temp_frame = swap_face(source_face, target_face, temp_frame)
-    return temp_frame
+            is_swapped = True
+    return temp_frame, is_swapped
 
 
 def process_frames(source_path: str, temp_frame_paths: List[str], update: Callable[[], None]) -> None:
@@ -84,9 +86,10 @@ def process_frames(source_path: str, temp_frame_paths: List[str], update: Callab
         # 每一帧都重新提取reference_face
         # reference_face = get_one_face(temp_frame, roop.globals.reference_face_position)
         # set_face_reference(reference_face)
-        result = process_frame(source_face, reference_face, temp_frame)
+        result, is_swapped = process_frame(source_face, reference_face, temp_frame)
         # 每一帧检查是否实现替换
-        if np.array_equal(result, temp_frame):
+        # if np.array_equal(result, temp_frame):
+        if not is_swapped:
             nonswap_frame_paths.append(temp_frame_path)
         cv2.imwrite(temp_frame_path, result)
         if update:
@@ -105,7 +108,7 @@ def process_image(source_path: str, target_path: str, output_path: str) -> None:
     target_frame = cv2.imread(target_path)
     reference_face = None if roop.globals.many_faces else get_one_face(target_frame,
                                                                        roop.globals.reference_face_position)
-    result = process_frame(source_face, reference_face, target_frame)
+    result, is_swapped = process_frame(source_face, reference_face, target_frame)
     cv2.imwrite(output_path, result)
 
 
