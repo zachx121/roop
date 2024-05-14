@@ -28,7 +28,8 @@ def run_ffmpeg(args: List[str]) -> bool:
         res = subprocess.check_output(commands, stderr=subprocess.STDOUT)
         print("Execute res: %s" % res)
         return True
-    except Exception:
+    except Exception as e:
+        print(">>> ERROR: %s" % e)
         pass
     return False
 
