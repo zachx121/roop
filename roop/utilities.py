@@ -55,14 +55,14 @@ def create_video(target_path: str, fps: float = 30) -> bool:
     temp_output_path = get_temp_output_path(target_path)
     temp_directory_path = get_temp_directory_path(target_path)
     output_video_quality = (roop.globals.output_video_quality + 1) * 51 // 100
-    commands = ['-hwaccel', 'auto', '-r', str(fps), '-i', os.path.join(temp_directory_path, '%04d.' + roop.globals.temp_frame_format), '-c:v', roop.globals.output_video_encoder]
-    in_file = "'%s'" % os.path.join(temp_directory_path, '*.' + roop.globals.temp_frame_format)
-    commands = ['-hwaccel', 'auto', '-r', str(fps), '-pattern_type', 'glob', '-i', in_file, '-c:v', roop.globals.output_video_encoder]
+    # commands = ['-hwaccel', 'auto', '-r', str(fps), '-i', os.path.join(temp_directory_path, '%04d.' + roop.globals.temp_frame_format), '-c:v', roop.globals.output_video_encoder]
+    # 之前原始的匹配方式(%04d)不支持抽帧后的图片拼接为视频
+    commands = ['-hwaccel', 'auto', '-r', str(fps), '-pattern_type', 'glob', '-i', os.path.join(temp_directory_path, '*.' + roop.globals.temp_frame_format), '-c:v', roop.globals.output_video_encoder]
     if roop.globals.output_video_encoder in ['libx264', 'libx265', 'libvpx']:
         commands.extend(['-crf', str(output_video_quality)])
     if roop.globals.output_video_encoder in ['h264_nvenc', 'hevc_nvenc']:
         commands.extend(['-cq', str(output_video_quality)])
-    commands.extend(['-pix_fmt', 'yuv420p', '-vf', 'colorspace=bt709:iall=bt601-6-625:fast=1', '-y', "'%s'" % temp_output_path])
+    commands.extend(['-pix_fmt', 'yuv420p', '-vf', 'colorspace=bt709:iall=bt601-6-625:fast=1', '-y', temp_output_path])
     return run_ffmpeg(commands)
 
 
