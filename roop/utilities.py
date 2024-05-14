@@ -25,7 +25,8 @@ def run_ffmpeg(args: List[str]) -> bool:
     commands.extend(args)
     print(">>> Executing ffmepg: %s" % " ".join(commands))
     try:
-        subprocess.check_output(commands, stderr=subprocess.STDOUT)
+        res = subprocess.check_output(commands, stderr=subprocess.STDOUT)
+        print("Execute res: %s" % res)
         return True
     except Exception:
         pass
