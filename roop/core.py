@@ -181,10 +181,11 @@ def start() -> None:
     if roop.globals.keep_fps:
         fps = detect_fps(roop.globals.target_path)
         update_status(f'Creating video with {fps} FPS...')
-        create_video(roop.globals.target_path, fps)
+        video_res = create_video(roop.globals.target_path, fps)
     else:
         update_status('Creating video with 30 FPS...')
-        create_video(roop.globals.target_path)
+        video_res = create_video(roop.globals.target_path)
+    print("create_video step is success: '%s'" % video_res)
     # handle audio
     if roop.globals.skip_audio:
         move_temp(roop.globals.target_path, roop.globals.output_path)
