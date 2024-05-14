@@ -69,6 +69,7 @@ def process_frame(source_face: Face, reference_face: Face, temp_frame: Frame) ->
         if many_faces:
             for target_face in many_faces:
                 temp_frame = swap_face(source_face, target_face, temp_frame)
+            is_swapped = True
     else:
         target_face = find_similar_face(temp_frame, reference_face)
         if target_face:
