@@ -23,6 +23,7 @@ if platform.system().lower() == 'darwin':
 def run_ffmpeg(args: List[str]) -> bool:
     commands = ['ffmpeg', '-hide_banner', '-loglevel', roop.globals.log_level]
     commands.extend(args)
+    print(">>> Executing ffmepg: %s" % " ".join(commands))
     try:
         subprocess.check_output(commands, stderr=subprocess.STDOUT)
         return True
@@ -63,6 +64,7 @@ def create_video(target_path: str, fps: float = 30) -> bool:
 
 def restore_audio(target_path: str, output_path: str) -> None:
     temp_output_path = get_temp_output_path(target_path)
+    # -shortest：如果音频和视频对不上这里取最短的那个（视频后来做了未替换抽帧功能）
     done = run_ffmpeg(['-i', temp_output_path, '-i', target_path, '-c:v', 'copy', '-map', '0:v:0', '-map', '1:a:0', '-shortest', '-y', output_path])
     if not done:
         move_temp(target_path, output_path)
