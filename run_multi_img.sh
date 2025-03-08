@@ -16,7 +16,7 @@ for file in "$TDIR"/*; do
         echo output: "${output}"
 
         # 执行 python 命令
-        python run.py --execution-provider cuda -s "$S_IMG" -t "${file}" -o "${output}" --frame-processor face_swapper --execution-threads 15
+        python run.py --execution-provider cuda -s "$S_IMG" -t "${file}" -o "${output}" --frame-processor face_swapper --execution-threads 15 --many-faces
         # 跳过未替换的帧、开启many_faces
         # python run.py --execution-provider cuda -s "$S_IMG" -t "${file}" -o "${output}" --frame-processor face_swapper --execution-threads 15 --skip_nonswap_frame --many-faces
     fi
